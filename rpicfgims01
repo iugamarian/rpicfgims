@@ -16,7 +16,13 @@ else
 	echo ""
 fi
 # Raspberry PI configuration file
-cat <<EOF >> /boot/config.txt
+if [ -f /boot/config.before ]
+then
+	rm /boot/config.txt
+else
+        mv /boot/config.txt /boot/config.before
+fi
+cat <<EOF > /boot/config.txt
 # Resolution 1366x768 looks good on a Full HD TV
 hdmi_group=2
 hdmi_mode=81
@@ -40,6 +46,9 @@ avoid_warnings=1
 avoid_warnings=2
 # Provide maximum 5V current to USB devices, good for external harddisk
 max_usb_current=1
+# Allow sound after kernel update
+# Enable audio (loads snd_bcm2835)
+dtparam=audio=on
 EOF
 # Raspberry Pi wait for network - ddclient runs without errors
 # https://www.raspberrypi.org/blog/latest-raspbian-update/
