@@ -15,7 +15,7 @@ else
     echo "Root."
 	echo ""
 fi
-apt-get install -y mc ncdu file-roller 
+apt-get install -y mc ncdu file-roller unar
 cat <<EOF > /usr/lib/mc/ext.d/video.sh
 #!/bin/sh
 
