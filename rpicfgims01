@@ -61,7 +61,7 @@ net.ipv6.conf.all.disable_ipv6 = 1
 net.ipv6.conf.default.disable_ipv6 = 1
 EOF
 # Xorg - don't black the screen at all
-cat <<EOF > etc/X11/xorg.conf.d/50-on-flags.conf
+cat <<EOF > /etc/X11/xorg.conf.d/50-on-flags.conf
 Section "ServerFlags"
     Option "BlankTime" "0"
     Option "StandbyTime" "0"
@@ -73,6 +73,17 @@ EOF
 sysctl --system
 # Show the sysctl configurations to see if they look well
 sysctl -a | grep disable | grep ipv6
+# Set locale for US, not UK - it's hard to find special characters
+sed -i 's/# en_US.UTF-8 UTF-8/en_US.UTF-8 UTF-8/g' /etc/locale.gen
+sed -i 's/# ro_RO.UTF-8 UTF-8/ro_RO.UTF-8 UTF-8/g' /etc/locale.gen
+locale-gen
+localectl set-locale LANG=ro_RO.UTF8
+localectl --no-convert set-keymap ro
+localectl --no-convert set-x11-keymap ro pc105 ,dvorak grp:alt_shift_toggle
+echo "KEYMAP=ro" > /etc/vconsole.conf
+rm /etc/localtime
+ln -sf /usr/share/zoneinfo/Europe/Bucharest /etc/localtime
+sleep 1
 # Get fresh repository status and upgrade installed packages
 apt-get update && apt-get upgrade -y
 # Install Firefox web browser - iceweasel installs firefox-esr
