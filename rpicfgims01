@@ -61,6 +61,7 @@ net.ipv6.conf.all.disable_ipv6 = 1
 net.ipv6.conf.default.disable_ipv6 = 1
 EOF
 # Xorg - don't black the screen at all
+mkdir -p /etc/X11/xorg.conf.d/
 cat <<EOF > /etc/X11/xorg.conf.d/50-on-flags.conf
 Section "ServerFlags"
     Option "BlankTime" "0"
